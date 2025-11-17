@@ -1,6 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+// 儲存最近的通知記錄（最多保留 50 筆）
+const notificationHistory: any[] = [];
+const MAX_HISTORY = 50;
+
+// 匯出函數以供其他 API 讀取
+export function getNotificationHistory() {
+    return notificationHistory;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    // GET 請求：回傳通知記錄
+    if (req.method === 'GET') {
+        return res.status(200).json({
+            total: notificationHistory.length,
+            notifications: notificationHistory
+        });
+    }
+
     // 只接受 POST 請求
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
@@ -21,6 +38,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             headers: headers,
             body: body,
         };
+
+        // 儲存到記憶體（開發用）
+        notificationHistory.unshift(logData);
+        if (notificationHistory.length > MAX_HISTORY) {
+            notificationHistory.pop();
+        }
 
         // 輸出到 console (可在 Vercel Logs 中查看)
         console.log('=== TapPay 通知 ===');

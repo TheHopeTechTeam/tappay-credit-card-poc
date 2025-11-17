@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
 type TPDirectType = {
     setupSDK: (appId: string, appKey: string, env: 'sandbox' | 'production') => void;
     card: {
@@ -16,6 +18,7 @@ declare global {
 }
 
 const PaymentPage = () => {
+    const router = useRouter();
     const [name, setName] = useState('John Doe');
     const [email, setEmail] = useState('john.doe@example.com');
     const [phoneNumber, setPhoneNumber] = useState('0912345678');
@@ -95,6 +98,23 @@ const PaymentPage = () => {
 
     return (
         <div className="container" style={{ marginTop: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h1 style={{ margin: 0 }}>TapPay 信用卡付款</h1>
+                <button
+                    type="button"
+                    onClick={() => router.push('/notifications')}
+                    style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    📋 查看通知記錄
+                </button>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>金額 (TWD)</label>

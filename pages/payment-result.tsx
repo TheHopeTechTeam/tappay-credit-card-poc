@@ -152,10 +152,9 @@ const PaymentResultPage = () => {
                         </pre>
                     </div>
 
-                    <div style={{ marginTop: '20px' }}>
+                    <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
                         <button
                             onClick={() => router.push('/payment')}
-                            className="btn btn-primary"
                             style={{
                                 padding: '10px 20px',
                                 backgroundColor: '#007bff',
@@ -166,6 +165,19 @@ const PaymentResultPage = () => {
                             }}
                         >
                             返回付款頁面
+                        </button>
+                        <button
+                            onClick={() => router.push('/notifications')}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#28a745',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            查看通知記錄
                         </button>
                     </div>
                 </div>
