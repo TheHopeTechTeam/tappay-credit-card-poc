@@ -18,7 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             'https://prod.tappaysdk.com/tpc/transaction/query',
             {
                 partner_key: process.env.TAPPAY_PARTNER_KEY,
-                rec_trade_id: rec_trade_id,
+                filters: {
+                    rec_trade_id: rec_trade_id,
+                },
             },
             {
                 headers: {
