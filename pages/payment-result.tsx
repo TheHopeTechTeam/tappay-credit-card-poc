@@ -76,18 +76,42 @@ const PaymentResultPage = () => {
             {transactionStatus && (
                 <div style={{ marginTop: '20px' }}>
                     <h2>交易狀態 (Record API 反查結果)</h2>
-                    <div style={{
-                        backgroundColor: transactionStatus.status === 0 ? '#d4edda' : '#f8d7da',
-                        padding: '15px',
-                        borderRadius: '5px',
-                        marginBottom: '20px'
-                    }}>
-                        <p><strong>狀態:</strong> {transactionStatus.status === 0 ? '✅ 交易成功' : '❌ 交易失敗'}</p>
-                        {transactionStatus.msg && <p><strong>訊息:</strong> {transactionStatus.msg}</p>}
-                        {transactionStatus.rec_trade_id && <p><strong>交易編號:</strong> {transactionStatus.rec_trade_id}</p>}
-                        {transactionStatus.bank_transaction_id && <p><strong>銀行交易編號:</strong> {transactionStatus.bank_transaction_id}</p>}
-                        {transactionStatus.amount && <p><strong>金額:</strong> TWD ${transactionStatus.amount}</p>}
-                    </div>
+                    {transactionStatus.trade_records && transactionStatus.trade_records.length > 0 ? (
+                        // 有交易記錄
+                        (() => {
+                            const record = transactionStatus.trade_records[0];
+                            const isSuccess = record.record_status === 0;
+                            return (
+                                <div style={{
+                                    backgroundColor: isSuccess ? '#d4edda' : '#f8d7da',
+                                    padding: '15px',
+                                    borderRadius: '5px',
+                                    marginBottom: '20px'
+                                }}>
+                                    <p><strong>狀態:</strong> {isSuccess ? '✅ 交易成功' : '❌ 交易失敗'}</p>
+                                    <p><strong>交易編號:</strong> {record.rec_trade_id}</p>
+                                    <p><strong>銀行交易編號:</strong> {record.bank_transaction_id}</p>
+                                    <p><strong>授權碼:</strong> {record.auth_code}</p>
+                                    <p><strong>金額:</strong> TWD ${record.amount}</p>
+                                    <p><strong>卡號:</strong> {record.partial_card_number}</p>
+                                    <p><strong>持卡人:</strong> {record.cardholder.name}</p>
+                                    <p><strong>3D 驗證:</strong> {record.three_domain_secure ? '✅ 已完成' : '❌ 未完成'}</p>
+                                    <p><strong>銀行回應:</strong> {record.bank_result_msg} ({record.bank_result_code})</p>
+                                </div>
+                            );
+                        })()
+                    ) : (
+                        // 查詢失敗或無記錄
+                        <div style={{
+                            backgroundColor: '#f8d7da',
+                            padding: '15px',
+                            borderRadius: '5px',
+                            marginBottom: '20px'
+                        }}>
+                            <p><strong>狀態:</strong> ❌ 查詢失敗</p>
+                            {transactionStatus.msg && <p><strong>訊息:</strong> {transactionStatus.msg}</p>}
+                        </div>
+                    )}
 
                     <details style={{ marginTop: '10px' }}>
                         <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>完整交易資訊</summary>
